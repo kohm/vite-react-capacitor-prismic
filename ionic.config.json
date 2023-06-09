@@ -1,0 +1,7 @@
+{
+  "name": "vite-cnp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

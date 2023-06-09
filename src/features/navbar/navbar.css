@@ -1,0 +1,20 @@
+ion-button {
+  height: auto;
+  font-size: 12px;
+  font-weight: 700;
+  --background: none;
+  --background-hover: none;
+  --background-activated: none;
+  --background-focused: none;
+
+  --color: #ffffff;
+
+  --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+
+  --ripple-color: deeppink;
+
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
