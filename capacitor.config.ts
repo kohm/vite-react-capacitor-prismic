@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'vite-cnp',
   webDir: 'dist',
   server: {
-    url: 'CONFIGURE YOUR LOCAL IP AND PORT HERE',
+    url: 'http://192.168.86.27:3000',
   },
 };
 

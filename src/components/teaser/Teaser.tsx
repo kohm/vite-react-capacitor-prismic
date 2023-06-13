@@ -1,8 +1,9 @@
 type TeaserProps = {
-  img?: string;
+  img?: string | null | undefined;
   title?: string | null;
   subtitle?: string | null;
   description?: string | null;
+  className?: string;
   clickAction?: () => void;
 };
 
@@ -12,14 +13,15 @@ function Teaser({
   subtitle,
   description,
   clickAction,
+  className,
 }: TeaserProps) {
   return (
     <button
-      className="flex w-full items-stretch gap-4 text-slate-400"
+      className={`flex w-full items-stretch gap-4 text-slate-400 ${className}`}
       onClick={clickAction}
     >
       <img
-        className="h-20 w-20"
+        className="h-24 w-24 rounded"
         src={img || 'https://ionicframework.com/docs/img/demos/thumbnail.svg'}
         alt="thumbnail"
       />

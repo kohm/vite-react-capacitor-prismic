@@ -12,14 +12,51 @@
       "description": "Default",
       "imageUrl": "",
       "primary": {
-        "main_text": {
-          "type": "StructuredText",
-          "config": {
-            "label": "Main Text",
-            "placeholder": "",
-            "allowTargetBlank": true,
-            "single": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
-          }
+        "quote": {
+          "type": "Text",
+          "config": { "label": "Quote", "placeholder": "" }
+        },
+        "author": {
+          "type": "Text",
+          "config": { "label": "Author", "placeholder": "" }
+        }
+      },
+      "items": {}
+    },
+    {
+      "id": "light",
+      "name": "Light",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "quote": {
+          "type": "Text",
+          "config": { "label": "Quote", "placeholder": "" }
+        },
+        "author": {
+          "type": "Text",
+          "config": { "label": "Author", "placeholder": "" }
+        }
+      },
+      "items": {}
+    },
+    {
+      "id": "withLines",
+      "name": "With Lines",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "quote": {
+          "type": "Text",
+          "config": { "label": "Quote", "placeholder": "" }
+        },
+        "author": {
+          "type": "Text",
+          "config": { "label": "Author", "placeholder": "" }
         }
       },
       "items": {}

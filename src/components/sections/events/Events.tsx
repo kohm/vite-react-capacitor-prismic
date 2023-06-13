@@ -13,8 +13,10 @@ function Events() {
       {events &&
         events.map((event) => (
           <Teaser
+            className="pb-4"
             key={event.uid}
             subtitle={event.data.byline}
+            img={event.data.main_image?.url}
             clickAction={() => {
               history.push(`/events/${event.uid}`);
             }}

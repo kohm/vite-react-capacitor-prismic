@@ -1,7 +1,8 @@
 import { IonContent } from '@ionic/react';
-import { usePrismicDocumentByUID } from '@prismicio/react';
+import { SliceZone, usePrismicDocumentByUID } from '@prismicio/react';
 import { useParams } from 'react-router-dom';
 import { EventDocument } from '../../../../prismicio-types';
+import { components } from '../../../slices';
 
 function EventsDetails() {
   const { id }: { id: string } = useParams();
@@ -13,7 +14,7 @@ function EventsDetails() {
       {document && (
         <div className="text-slate-200">
           <h1>{document.data.title}</h1>
-          <h2>asd</h2>
+          <SliceZone slices={document.data.slices} components={components} />
         </div>
       )}
     </IonContent>

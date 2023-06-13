@@ -16,6 +16,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --color: rgba(255, 255, 255, 0.87);
 }
 
 .ion-page {
@@ -23,10 +25,15 @@
 }
 
 ion-content {
+  --color: rgba(255, 255, 255, 0.87);
   --padding-bottom: env(safe-area-inset-bottom);
   --padding-top: env(safe-area-inset-top);
 }
 
 ion-content::part(background) {
   @apply bg-slate-950;
+}
+
+.button-primary {
+  @apply bg-emerald-800;
 }

@@ -1,24 +1,12 @@
 {
-  "id": "event",
-  "label": "Event",
+  "id": "product",
+  "label": "Product",
   "format": "page",
   "repeatable": true,
   "status": true,
   "json": {
     "Main": {
       "uid": { "config": { "label": "UID" }, "type": "UID" },
-      "event_name": {
-        "type": "Text",
-        "config": { "label": "Event Name", "placeholder": "" }
-      },
-      "byline": {
-        "type": "Text",
-        "config": { "label": "Byline", "placeholder": "" }
-      },
-      "title": {
-        "type": "Text",
-        "config": { "label": "Title", "placeholder": "" }
-      },
       "main_text": {
         "type": "StructuredText",
         "config": {
@@ -28,24 +16,10 @@
           "single": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
         }
       },
-      "main_image": {
-        "type": "Image",
-        "config": {
-          "label": "Main Image",
-          "constraint": {},
-          "thumbnails": [{ "name": "mobile", "width": 200, "height": 200 }]
-        }
-      },
       "slices": {
         "type": "Slices",
         "fieldset": "Slice Zone",
-        "config": {
-          "choices": {
-            "quote": { "type": "SharedSlice" },
-            "hero": { "type": "SharedSlice" },
-            "highlights": { "type": "SharedSlice" }
-          }
-        }
+        "config": { "choices": {} }
       }
     },
     "SEO & Metadata": {

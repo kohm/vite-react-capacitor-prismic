@@ -3,16 +3,54 @@
 		"__TYPE__": "SharedSliceContent",
 		"variation": "default",
 		"primary": {
-			"main_text": {
-				"__TYPE__": "StructuredTextContent",
-				"value": [
-					{
-						"type": "paragraph",
-						"content": {
-							"text": "Nostrud eiusmod in dolore aute occaecat cupidatat eiusmod exercitation laborum. Exercitation cupidatat esse adipisicing laborum ullamco pariatur ea reprehenderit id fugiat. Nisi eu duis voluptate ipsum ex veniam veniam velit excepteur nisi incididunt non ex."
-						}
-					}
-				]
+			"quote": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "Relive Ushuaïa Ibiza 2022 with this video from Dimitri Vegas & Like Mike"
+			},
+			"author": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "Martin Garrix"
+			}
+		},
+		"items": []
+	},
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "light",
+		"primary": {
+			"quote": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "Relive Ushuaïa Ibiza 2022 with this video from Dimitri Vegas & Like Mike"
+			},
+			"author": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "Martin Garrix"
+			}
+		},
+		"items": [
+			{
+				"__TYPE__": "GroupItemContent",
+				"value": []
+			}
+		]
+	},
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "withLines",
+		"primary": {
+			"quote": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "Relive Ushuaïa Ibiza 2022 with this video from Dimitri Vegas & Like Mike"
+			},
+			"author": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "Martin Garrix"
 			}
 		},
 		"items": []

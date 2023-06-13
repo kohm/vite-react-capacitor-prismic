@@ -1,5 +1,5 @@
 import { Content } from '@prismicio/client';
-import { PrismicRichText, SliceComponentProps } from '@prismicio/react';
+import { SliceComponentProps } from '@prismicio/react';
 
 /**
  * Props for `Quote`.
@@ -11,12 +11,22 @@ export type QuoteProps = SliceComponentProps<Content.QuoteSlice>;
  */
 function Quote({ slice }: QuoteProps): JSX.Element {
   return (
-    <section
-      data-slice-type={slice.slice_type}
-      data-slice-variation={slice.variation}
-    >
-      <PrismicRichText field={slice.primary.main_text} />
-    </section>
+    <>
+      {slice.variation == 'withLines' && <hr className="mb-2 mt-5" />}
+      <section
+        className={`${
+          slice.variation === 'light' && 'bg-white text-slate-950'
+        } p-8 text-center`}
+        data-slice-type={slice.slice_type}
+        data-slice-variation={slice.variation}
+      >
+        <h3 className="text-lg font-bold uppercase">{slice.primary.quote}</h3>
+        {slice.primary.author && (
+          <p className="mt-4 font-bold">{slice.primary.author}</p>
+        )}
+      </section>
+      {slice.variation == 'withLines' && <hr className="mb-2 mt-5" />}
+    </>
   );
 }
 

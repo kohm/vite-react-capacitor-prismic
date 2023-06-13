@@ -7,6 +7,8 @@ import { components } from '../../slices';
 import { IonContent } from '@ionic/react';
 import { JSX } from 'react/jsx-runtime';
 
+import './slice-simulator.css';
+
 function SliceSimulatorPage() {
   return (
     <IonContent>

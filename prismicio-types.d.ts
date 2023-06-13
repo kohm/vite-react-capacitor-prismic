@@ -2,47 +2,100 @@
 
 import type * as prismic from '@prismicio/client';
 
-import {
-  SliceSimulatorProps as BaseSliceSimulatorProps,
-  SliceSimulatorState,
-} from '@prismicio/slice-simulator-core';
-export type SliceSimulatorSliceZoneProps = {
-  slices: SliceSimulatorState['slices'];
-};
-export type SliceSimulatorProps = {
-  /**
-   * React component to render simulated Slices.
-   *
-   * @example
-   *
-   * ```tsx
-   * import { SliceSimulator } from "@slicemachine/adapter-next/simulator";
-   * import { SliceZone } from "@prismicio/react";
-   *
-   * import { components } from "../slices";
-   *
-   * <SliceSimulator
-   * 	sliceZone={({ slices }) => (
-   * 		<SliceZone slices={slices} components={components} />
-   * 	)}
-   * />;
-   * ```
-   */
-  sliceZone: (props: SliceSimulatorSliceZoneProps) => JSX.Element;
-  className?: string;
-} & Omit<BaseSliceSimulatorProps, 'state'>;
-export declare const SliceSimulator: ({
-  sliceZone: SliceZoneComp,
-  background,
-  zIndex,
-  className,
-}: SliceSimulatorProps) => JSX.Element;
-
 type Simplify<T> = {
   [KeyType in keyof T]: T[KeyType];
 };
+/** Content for Article documents */
+interface ArticleDocumentData {
+  /**
+   * Main Text field in *Article*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: article.main_text
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   *
+   */
+  main_text: prismic.RichTextField;
+  /**
+   * Slice Zone field in *Article*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: article.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/slices
+   *
+   */
+  slices: prismic.SliceZone<ArticleDocumentDataSlicesSlice>;
+  /**
+   * Meta Description field in *Article*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: article.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   *
+   */
+  meta_description: prismic.RichTextField;
+  /**
+   * Meta Image field in *Article*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: article.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/image
+   *
+   */
+  meta_image: prismic.ImageField<never>;
+  /**
+   * Meta Title field in *Article*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: article.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  meta_title: prismic.KeyTextField;
+}
+/**
+ * Slice for *Article → Slice Zone*
+ *
+ */
+type ArticleDocumentDataSlicesSlice = HeroSlice | HighlightsSlice | QuoteSlice;
+/**
+ * Article document from Prismic
+ *
+ * - **API ID**: `article`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type ArticleDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<
+    Simplify<ArticleDocumentData>,
+    'article',
+    Lang
+  >;
 /** Content for Event documents */
 interface EventDocumentData {
+  /**
+   * Event Name field in *Event*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.event_name
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  event_name: prismic.KeyTextField;
   /**
    * Byline field in *Event*
    *
@@ -76,6 +129,17 @@ interface EventDocumentData {
    *
    */
   main_text: prismic.RichTextField;
+  /**
+   * Main Image field in *Event*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.main_image
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/image
+   *
+   */
+  main_image: prismic.ImageField<'mobile'>;
   /**
    * Slice Zone field in *Event*
    *
@@ -125,7 +189,7 @@ interface EventDocumentData {
  * Slice for *Event → Slice Zone*
  *
  */
-type EventDocumentDataSlicesSlice = QuoteSlice;
+type EventDocumentDataSlicesSlice = QuoteSlice | HeroSlice | HighlightsSlice;
 /**
  * Event document from Prismic
  *
@@ -137,22 +201,577 @@ type EventDocumentDataSlicesSlice = QuoteSlice;
  */
 export type EventDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<EventDocumentData>, 'event', Lang>;
-export type AllDocumentTypes = EventDocument;
+/** Content for Home Page documents */
+interface HomePageDocumentData {
+  /**
+   * Slice Zone field in *Home Page*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home_page.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/slices
+   *
+   */
+  slices: prismic.SliceZone<HomePageDocumentDataSlicesSlice>;
+  /**
+   * Meta Description field in *Home Page*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: home_page.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   *
+   */
+  meta_description: prismic.RichTextField;
+  /**
+   * Meta Image field in *Home Page*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home_page.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/image
+   *
+   */
+  meta_image: prismic.ImageField<never>;
+  /**
+   * Meta Title field in *Home Page*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: home_page.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  meta_title: prismic.KeyTextField;
+}
+/**
+ * Slice for *Home Page → Slice Zone*
+ *
+ */
+type HomePageDocumentDataSlicesSlice = never;
+/**
+ * Home Page document from Prismic
+ *
+ * - **API ID**: `home_page`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type HomePageDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<
+    Simplify<HomePageDocumentData>,
+    'home_page',
+    Lang
+  >;
+/** Content for News documents */
+interface NewsDocumentData {
+  /**
+   * Slice Zone field in *News*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/slices
+   *
+   */
+  slices: prismic.SliceZone<NewsDocumentDataSlicesSlice>;
+  /**
+   * Meta Description field in *News*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: news.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   *
+   */
+  meta_description: prismic.RichTextField;
+  /**
+   * Meta Image field in *News*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/image
+   *
+   */
+  meta_image: prismic.ImageField<never>;
+  /**
+   * Meta Title field in *News*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: news.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  meta_title: prismic.KeyTextField;
+}
+/**
+ * Slice for *News → Slice Zone*
+ *
+ */
+type NewsDocumentDataSlicesSlice = never;
+/**
+ * News document from Prismic
+ *
+ * - **API ID**: `news`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type NewsDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<NewsDocumentData>, 'news', Lang>;
+/** Content for Product documents */
+interface ProductDocumentData {
+  /**
+   * Main Text field in *Product*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.main_text
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   *
+   */
+  main_text: prismic.RichTextField;
+  /**
+   * Slice Zone field in *Product*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/slices
+   *
+   */
+  slices: prismic.SliceZone<ProductDocumentDataSlicesSlice>;
+  /**
+   * Meta Description field in *Product*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: product.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   *
+   */
+  meta_description: prismic.RichTextField;
+  /**
+   * Meta Image field in *Product*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/image
+   *
+   */
+  meta_image: prismic.ImageField<never>;
+  /**
+   * Meta Title field in *Product*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: product.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  meta_title: prismic.KeyTextField;
+}
+/**
+ * Slice for *Product → Slice Zone*
+ *
+ */
+type ProductDocumentDataSlicesSlice = never;
+/**
+ * Product document from Prismic
+ *
+ * - **API ID**: `product`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type ProductDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<
+    Simplify<ProductDocumentData>,
+    'product',
+    Lang
+  >;
+/** Content for Radio documents */
+interface RadioDocumentData {
+  /**
+   * Main Text field in *Radio*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: radio.main_text
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   *
+   */
+  main_text: prismic.RichTextField;
+  /**
+   * Slice Zone field in *Radio*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: radio.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/slices
+   *
+   */
+  slices: prismic.SliceZone<RadioDocumentDataSlicesSlice>;
+  /**
+   * Meta Description field in *Radio*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: radio.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   *
+   */
+  meta_description: prismic.RichTextField;
+  /**
+   * Meta Image field in *Radio*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: radio.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/image
+   *
+   */
+  meta_image: prismic.ImageField<never>;
+  /**
+   * Meta Title field in *Radio*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: radio.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  meta_title: prismic.KeyTextField;
+}
+/**
+ * Slice for *Radio → Slice Zone*
+ *
+ */
+type RadioDocumentDataSlicesSlice = never;
+/**
+ * Radio document from Prismic
+ *
+ * - **API ID**: `radio`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type RadioDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<RadioDocumentData>, 'radio', Lang>;
+/** Content for Video documents */
+interface VideoDocumentData {
+  /**
+   * Title field in *Video*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  title: prismic.KeyTextField;
+  /**
+   * Slice Zone field in *Video*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/core-concepts/slices
+   *
+   */
+  slices: prismic.SliceZone<VideoDocumentDataSlicesSlice>;
+  /**
+   * Meta Description field in *Video*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: video.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   *
+   */
+  meta_description: prismic.RichTextField;
+  /**
+   * Meta Image field in *Video*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/image
+   *
+   */
+  meta_image: prismic.ImageField<never>;
+  /**
+   * Meta Title field in *Video*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: video.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  meta_title: prismic.KeyTextField;
+}
+/**
+ * Slice for *Video → Slice Zone*
+ *
+ */
+type VideoDocumentDataSlicesSlice = never;
+/**
+ * Video document from Prismic
+ *
+ * - **API ID**: `video`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type VideoDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<VideoDocumentData>, 'video', Lang>;
+export type AllDocumentTypes =
+  | ArticleDocument
+  | EventDocument
+  | HomePageDocument
+  | NewsDocument
+  | ProductDocument
+  | RadioDocument
+  | VideoDocument;
+/**
+ * Primary content in Hero → Primary
+ *
+ */
+interface HeroSliceDefaultPrimary {
+  /**
+   * Image field in *Hero → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.primary.image
+   * - **Documentation**: https://prismic.io/docs/core-concepts/image
+   *
+   */
+  image: prismic.ImageField<'Mobile'>;
+  /**
+   * Main Title field in *Hero → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.primary.main_title
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  main_title: prismic.KeyTextField;
+  /**
+   * Subtitle field in *Hero → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.primary.subtitle
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  subtitle: prismic.KeyTextField;
+  /**
+   * Description field in *Hero → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.primary.description
+   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   *
+   */
+  description: prismic.RichTextField;
+  /**
+   * CTA URL field in *Hero → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.primary.cta_url
+   * - **Documentation**: https://prismic.io/docs/core-concepts/link-content-relationship
+   *
+   */
+  cta_url: prismic.LinkField;
+  /**
+   * CTA Label field in *Hero → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.primary.cta_label
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  cta_label: prismic.KeyTextField;
+}
+/**
+ * Default variation for Hero Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: `Default`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/reusing-slices
+ *
+ */
+export type HeroSliceDefault = prismic.SharedSliceVariation<
+  'default',
+  Simplify<HeroSliceDefaultPrimary>,
+  never
+>;
+/**
+ * Slice variation for *Hero*
+ *
+ */
+type HeroSliceVariation = HeroSliceDefault;
+/**
+ * Hero Shared Slice
+ *
+ * - **API ID**: `hero`
+ * - **Description**: `Hero`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/reusing-slices
+ *
+ */
+export type HeroSlice = prismic.SharedSlice<'hero', HeroSliceVariation>;
+/**
+ * Primary content in Highlights → Primary
+ *
+ */
+interface HighlightsSliceDefaultPrimary {
+  /**
+   * Title field in *Highlights → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: highlights.primary.title
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  title: prismic.KeyTextField;
+  /**
+   * Subtitle field in *Highlights → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: highlights.primary.subtitle
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  subtitle: prismic.KeyTextField;
+}
+/**
+ * Item in Highlights → Items
+ *
+ */
+export interface HighlightsSliceDefaultItem {
+  /**
+   * Highlight Item field in *Highlights → Items*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: highlights.items[].highlight_item
+   * - **Documentation**: https://prismic.io/docs/core-concepts/link-content-relationship
+   *
+   */
+  highlight_item: prismic.ContentRelationshipField<
+    'event' | 'article' | 'radio' | 'news' | 'product'
+  >;
+}
+/**
+ * Default variation for Highlights Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: `Default`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/reusing-slices
+ *
+ */
+export type HighlightsSliceDefault = prismic.SharedSliceVariation<
+  'default',
+  Simplify<HighlightsSliceDefaultPrimary>,
+  Simplify<HighlightsSliceDefaultItem>
+>;
+/**
+ * carousel variation for Highlights Slice
+ *
+ * - **API ID**: `carousel`
+ * - **Description**: `Default`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/reusing-slices
+ *
+ */
+export type HighlightsSliceCarousel = prismic.SharedSliceVariation<
+  'carousel',
+  Record<string, never>,
+  never
+>;
+/**
+ * Slice variation for *Highlights*
+ *
+ */
+type HighlightsSliceVariation =
+  | HighlightsSliceDefault
+  | HighlightsSliceCarousel;
+/**
+ * Highlights Shared Slice
+ *
+ * - **API ID**: `highlights`
+ * - **Description**: `Highlights`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/reusing-slices
+ *
+ */
+export type HighlightsSlice = prismic.SharedSlice<
+  'highlights',
+  HighlightsSliceVariation
+>;
 /**
  * Primary content in Quote → Primary
  *
  */
 interface QuoteSliceDefaultPrimary {
   /**
-   * Main Text field in *Quote → Primary*
+   * Quote field in *Quote → Primary*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: quote.primary.main_text
-   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   * - **API ID Path**: quote.primary.quote
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
    *
    */
-  main_text: prismic.RichTextField;
+  quote: prismic.KeyTextField;
+  /**
+   * Author field in *Quote → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quote.primary.author
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  author: prismic.KeyTextField;
 }
 /**
  * Default variation for Quote Slice
@@ -168,10 +787,91 @@ export type QuoteSliceDefault = prismic.SharedSliceVariation<
   never
 >;
 /**
+ * Primary content in Quote → Primary
+ *
+ */
+interface QuoteSliceLightPrimary {
+  /**
+   * Quote field in *Quote → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quote.primary.quote
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  quote: prismic.KeyTextField;
+  /**
+   * Author field in *Quote → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quote.primary.author
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  author: prismic.KeyTextField;
+}
+/**
+ * Light variation for Quote Slice
+ *
+ * - **API ID**: `light`
+ * - **Description**: `Default`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/reusing-slices
+ *
+ */
+export type QuoteSliceLight = prismic.SharedSliceVariation<
+  'light',
+  Simplify<QuoteSliceLightPrimary>,
+  never
+>;
+/**
+ * Primary content in Quote → Primary
+ *
+ */
+interface QuoteSliceWithLinesPrimary {
+  /**
+   * Quote field in *Quote → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quote.primary.quote
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  quote: prismic.KeyTextField;
+  /**
+   * Author field in *Quote → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: quote.primary.author
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  author: prismic.KeyTextField;
+}
+/**
+ * With Lines variation for Quote Slice
+ *
+ * - **API ID**: `withLines`
+ * - **Description**: `Default`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/reusing-slices
+ *
+ */
+export type QuoteSliceWithLines = prismic.SharedSliceVariation<
+  'withLines',
+  Simplify<QuoteSliceWithLinesPrimary>,
+  never
+>;
+/**
  * Slice variation for *Quote*
  *
  */
-type QuoteSliceVariation = QuoteSliceDefault;
+type QuoteSliceVariation =
+  | QuoteSliceDefault
+  | QuoteSliceLight
+  | QuoteSliceWithLines;
 /**
  * Quote Shared Slice
  *
@@ -190,12 +890,44 @@ declare module '@prismicio/client' {
   }
   namespace Content {
     export type {
+      ArticleDocumentData,
+      ArticleDocumentDataSlicesSlice,
+      ArticleDocument,
       EventDocumentData,
       EventDocumentDataSlicesSlice,
       EventDocument,
+      HomePageDocumentData,
+      HomePageDocumentDataSlicesSlice,
+      HomePageDocument,
+      NewsDocumentData,
+      NewsDocumentDataSlicesSlice,
+      NewsDocument,
+      ProductDocumentData,
+      ProductDocumentDataSlicesSlice,
+      ProductDocument,
+      RadioDocumentData,
+      RadioDocumentDataSlicesSlice,
+      RadioDocument,
+      VideoDocumentData,
+      VideoDocumentDataSlicesSlice,
+      VideoDocument,
       AllDocumentTypes,
+      HeroSliceDefaultPrimary,
+      HeroSliceDefault,
+      HeroSliceVariation,
+      HeroSlice,
+      HighlightsSliceDefaultPrimary,
+      HighlightsSliceDefaultItem,
+      HighlightsSliceDefault,
+      HighlightsSliceCarousel,
+      HighlightsSliceVariation,
+      HighlightsSlice,
       QuoteSliceDefaultPrimary,
       QuoteSliceDefault,
+      QuoteSliceLightPrimary,
+      QuoteSliceLight,
+      QuoteSliceWithLinesPrimary,
+      QuoteSliceWithLines,
       QuoteSliceVariation,
       QuoteSlice,
     };

@@ -1,6 +1,6 @@
 {
-  "apiEndpoint": "https://REPOSITORY NAME.prismic.io/api/v2",
-  "repositoryName": "REPOSITORY NAME",
+  "apiEndpoint": "https://ionic-capacitor-poc.prismic.io/api/v2",
+  "repositoryName": "ionic-capacitor-poc",
   "adapter": "@slicemachine/adapter-next",
   "libraries": ["./src/slices"],
   "localSliceSimulatorURL": "http://localhost:3000/slice-simulator"
