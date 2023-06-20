@@ -47,6 +47,33 @@
         }
       },
       "items": {}
+    },
+    {
+      "id": "heroQuote",
+      "name": "Hero Quote",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "image": {
+          "type": "Image",
+          "config": {
+            "label": "Image",
+            "constraint": {},
+            "thumbnails": [{ "name": "Mobile", "width": 678, "height": null }]
+          }
+        },
+        "main_title": {
+          "type": "Text",
+          "config": { "label": "Main Title", "placeholder": "" }
+        },
+        "subtitle": {
+          "type": "Text",
+          "config": { "label": "Subtitle", "placeholder": "" }
+        }
+      },
+      "items": {}
     }
   ]
 }

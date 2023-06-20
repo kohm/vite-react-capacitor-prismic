@@ -154,14 +154,14 @@ interface EventDocumentData {
   /**
    * Meta Description field in *Event*
    *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: A brief summary of the page
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
    * - **API ID Path**: event.meta_description
    * - **Tab**: SEO & Metadata
-   * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
    *
    */
-  meta_description: prismic.RichTextField;
+  meta_description: prismic.KeyTextField;
   /**
    * Meta Image field in *Event*
    *
@@ -645,10 +645,59 @@ export type HeroSliceDefault = prismic.SharedSliceVariation<
   never
 >;
 /**
+ * Primary content in Hero → Primary
+ *
+ */
+interface HeroSliceHeroQuotePrimary {
+  /**
+   * Image field in *Hero → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.primary.image
+   * - **Documentation**: https://prismic.io/docs/core-concepts/image
+   *
+   */
+  image: prismic.ImageField<'Mobile'>;
+  /**
+   * Main Title field in *Hero → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.primary.main_title
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  main_title: prismic.KeyTextField;
+  /**
+   * Subtitle field in *Hero → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.primary.subtitle
+   * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+   *
+   */
+  subtitle: prismic.KeyTextField;
+}
+/**
+ * Hero Quote variation for Hero Slice
+ *
+ * - **API ID**: `heroQuote`
+ * - **Description**: `Default`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/reusing-slices
+ *
+ */
+export type HeroSliceHeroQuote = prismic.SharedSliceVariation<
+  'heroQuote',
+  Simplify<HeroSliceHeroQuotePrimary>,
+  never
+>;
+/**
  * Slice variation for *Hero*
  *
  */
-type HeroSliceVariation = HeroSliceDefault;
+type HeroSliceVariation = HeroSliceDefault | HeroSliceHeroQuote;
 /**
  * Hero Shared Slice
  *
@@ -914,6 +963,8 @@ declare module '@prismicio/client' {
       AllDocumentTypes,
       HeroSliceDefaultPrimary,
       HeroSliceDefault,
+      HeroSliceHeroQuotePrimary,
+      HeroSliceHeroQuote,
       HeroSliceVariation,
       HeroSlice,
       HighlightsSliceDefaultPrimary,

@@ -10,18 +10,28 @@ function Events() {
 
   return (
     <IonContent className="ion-padding">
-      {events &&
-        events.map((event) => (
-          <Teaser
-            className="pb-4"
-            key={event.uid}
-            subtitle={event.data.byline}
-            img={event.data.main_image?.url}
-            clickAction={() => {
-              history.push(`/events/${event.uid}`);
-            }}
-          />
-        ))}
+      <div className="mb-28 ml-auto mr-auto max-w-screen-lg gap-9 lg:grid lg:grid-cols-2">
+        {events &&
+          events.map((event) => (
+            <Teaser
+              key={event.data.event_name}
+              teaser={{
+                img: event.data.main_image,
+                byline: event.data.byline,
+                title: event.data.event_name,
+                description: event.data.meta_description,
+              }}
+              img={<Teaser.Image />}
+              info={
+                <Teaser.Info>
+                  <Teaser.Byline />
+                  <Teaser.Title />
+                  <Teaser.Description />
+                </Teaser.Info>
+              }
+            />
+          ))}
+      </div>
     </IonContent>
   );
 }

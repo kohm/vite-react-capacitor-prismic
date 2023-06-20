@@ -1,37 +1,32 @@
-type TeaserProps = {
-  img?: string | null | undefined;
-  title?: string | null;
-  subtitle?: string | null;
-  description?: string | null;
-  className?: string;
-  clickAction?: () => void;
-};
+import TeaserByline from './teaser-byline';
+import TeaserContext from './teaser-context';
+import TeaserDescription from './teaser-description';
+import TeaserHeader from './teaser-header';
+import TeaserImage from './teaser-image';
+import TeaserInfo from './teaser-info';
+import TeaserTitle from './teaser-title';
+import { TeaserProps } from './types';
 
-function Teaser({
-  img,
-  title,
-  subtitle,
-  description,
-  clickAction,
-  className,
-}: TeaserProps) {
+function Teaser({ teaser, img, header, info, action }: TeaserProps) {
   return (
-    <button
-      className={`flex w-full items-stretch gap-4 text-slate-400 ${className}`}
-      onClick={clickAction}
-    >
-      <img
-        className="h-24 w-24 rounded"
-        src={img || 'https://ionicframework.com/docs/img/demos/thumbnail.svg'}
-        alt="thumbnail"
-      />
-      <div className="flex flex-col justify-center">
-        {title && <span>{title}</span>}
-        {subtitle && <span>{subtitle}</span>}
-        {description && <span>{description}</span>}
+    <TeaserContext.Provider value={{ teaser }}>
+      <div>
+        {img}
+        <div className="bg-slate-50 px-8 py-3 text-center text-slate-950">
+          {header}
+          {info}
+          {action}
+        </div>
       </div>
-    </button>
+    </TeaserContext.Provider>
   );
 }
+
+Teaser.Image = TeaserImage;
+Teaser.Header = TeaserHeader;
+Teaser.Byline = TeaserByline;
+Teaser.Title = TeaserTitle;
+Teaser.Description = TeaserDescription;
+Teaser.Info = TeaserInfo;
 
 export default Teaser;

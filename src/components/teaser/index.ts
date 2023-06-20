@@ -1,3 +1,3 @@
-import Teaser from './Teaser';
+import Teaser from './teaser';
 
 export default Teaser;

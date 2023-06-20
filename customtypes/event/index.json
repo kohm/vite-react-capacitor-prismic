@@ -50,11 +50,8 @@
     },
     "SEO & Metadata": {
       "meta_description": {
-        "config": {
-          "label": "Meta Description",
-          "placeholder": "A brief summary of the page"
-        },
-        "type": "StructuredText"
+        "type": "Text",
+        "config": { "label": "Meta Description", "placeholder": "" }
       },
       "meta_image": {
         "config": {
